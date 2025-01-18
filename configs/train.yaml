@@ -1,0 +1,24 @@
+# @package _global_
+# configs for unconditional edm training
+defaults:
+  - _self_
+  - data: default
+  - model: local2udf
+  - callbacks: default
+  - logger: tensorboard
+  - trainer: default
+  - paths: default
+  - extras: default
+  - hydra: default
+
+  - experiment: null
+  - hparams_search: null
+  - optional local: default
+  - debug: null
+
+task_name: "train"
+tags: ["default training"]
+train: True
+test: False
+ckpt_path: null
+seed: null

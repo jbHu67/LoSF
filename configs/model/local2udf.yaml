@@ -1,0 +1,41 @@
+_target_: src.models.Local2UDF_module.Local2UDFModule
+
+net:
+  _target_: src.models.components.feature_attn_layer.FeatureAttnLayer
+  pts_dim: 64
+  vec_dim: 64
+  out_dim: 128
+  num_self_attn: 4
+
+pts_net:
+  _target_: src.models.components.pointnet.ResnetPointnet
+  c_dim: 64
+  dim: 3
+  hidden_dim: 64
+
+vec_net:
+  _target_: src.models.components.pointnet.ResnetPointnet
+  c_dim: 64
+  dim: 3
+  hidden_dim: 64
+
+pts_denoise_net:
+  _target_: src.models.components.pointnet.ResnetPointnet
+  c_dim: 64
+  dim: 3
+  hidden_dim: 64
+
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 0.0001
+  weight_decay: 0.0
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+  _partial_: true
+  mode: min
+  factor: 0.5
+  patience: 20
+
+compile: false

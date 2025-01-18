@@ -1,0 +1,59 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /paths: default
+  - override /data: default
+  - override /model: local2udf
+  - override /callbacks: default
+  - override /trainer: default
+
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["train","uniform"]
+
+seed: 12345
+
+trainer:
+  min_epochs: 50
+  max_epochs: 1500
+  accelerator: gpu
+  devices: 1
+  # gradient_clip_val: 0.5
+
+model:
+  net:
+    pts_dim: 16
+    vec_dim: 16
+    out_dim: 32
+    num_self_attn: 4
+  pts_net:
+    c_dim: ${model.net.pts_dim}
+    dim: 3
+    hidden_dim: 32
+  vec_net:
+    c_dim: ${model.net.vec_dim}
+    dim: 3
+    hidden_dim: 32
+  pts_denoise_net:
+    c_dim: ${model.net.pts_dim}
+    dim: 3
+    hidden_dim: 32
+  optimizer:
+    lr: 0.0001
+
+data:
+  has_noise: True
+  noise_level: 0.1
+  has_outliers: False
+  outlier_ratio: 0.0
+  has_transform: True
+  batch_size: 256
+  num_workers: 8
+
+ckpt_path: null
+task_name: "train-light"

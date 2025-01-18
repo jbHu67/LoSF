@@ -1,0 +1,65 @@
+task_name: eval
+tags:
+  - udf
+  - full
+  - eval
+ckpt_path: /data/nglm005/hjb/UDF/logs/train-smooth-w-noise/runs/2024-05-10_14-27-28/checkpoints/epoch_936.ckpt
+seed: 12345
+data:
+  _target_: src.data.local_dataloader.LocalDataModule
+  data_dir: /data/nglm005/hjb/UDF/EvalDataset/DeepFashion/pc/clean/
+  radius: 0.018 # radius for local patch extraction
+  # noise and outliers only for synthetic data
+  has_noise: false # whether the input data has noise
+  noise_level: 0.00 # noise level for the input data
+  has_outliers: false # whether the input data has outliers
+  outlier_ratio: 0.0 # outlier ratio for the input data
+model: # model configuration
+  _target_: src.models.Local2UDF_module.Local2UDFModule
+  net:
+    _target_: src.models.components.feature_attn_layer.FeatureAttnLayer
+    pts_dim: 64
+    vec_dim: 64
+    out_dim: 128
+    num_self_attn: 4
+  pts_net:
+    _target_: src.models.components.pointnet.ResnetPointnet
+    c_dim: ${model.net.pts_dim}
+    dim: 3
+    hidden_dim: 64
+  vec_net:
+    _target_: src.models.components.pointnet.ResnetPointnet
+    c_dim: ${model.net.vec_dim}
+    dim: 3
+    hidden_dim: 64
+  pts_denoise_net:
+    _target_: src.models.components.pointnet.ResnetPointnet
+    c_dim: ${model.net.pts_dim}
+    dim: 3
+    hidden_dim: 64
+trainer:
+  _target_: lightning.pytorch.trainer.Trainer
+  default_root_dir: ${paths.output_dir}
+  min_epochs: 50
+  max_epochs: 1000
+  accelerator: gpu
+  devices: [6]
+  check_val_every_n_epoch: 1
+  deterministic: false
+paths:
+  root_dir: /home/nglm005/hjb/Local2UDF/
+  data_dir: /data/nglm005/hjb/UDF/
+  log_dir: /data/nglm005/hjb/UDF/logs/
+  output_dir: null
+  work_dir: ${hydra:runtime.cwd}
+extras:
+  ignore_warnings: true
+  enforce_tags: true
+  print_config: true
+mesh: # parameters configuration for DCUDF
+  resolution: 256
+  threshold: 0.003
+  is_cut: true
+  laplacian_weight: 4000
+experiment:
+  name: data_smooth

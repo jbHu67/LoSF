@@ -1,0 +1,11 @@
+_target_: src.data.local_dataloader.LocalDataModule
+ids_path: ${paths.data_dir}/
+data_dir: ${paths.data_dir}/train/
+has_noise: False
+noise_level: 0.0
+has_outliers: False
+outlier_ratio: 0.0
+has_transform: True
+batch_size: 32
+num_workers: 8
+pin_memory: True

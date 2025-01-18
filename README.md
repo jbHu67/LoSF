@@ -24,6 +24,8 @@
           <a class="button is-dark" href="https://arxiv.org/abs/2407.01330" role="button" target="_blank"> <span
               class="icon"> </span> <span> Paper </span> </a>
         </span>
+        </div>
+        <div class="is-flex is-justify-content-center">
         <span class="icon-text mx-1">
           <a class="button is-dark" href="https://jbhu67.github.io/LoSF-UDF.github.io/" role="button" target="_blank">
             <span class="icon"> </ion-icon> </span> <span> Project page </span> </a>
